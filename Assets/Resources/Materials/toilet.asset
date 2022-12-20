@@ -14,3 +14,4 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   icon: {fileID: -1196689438, guid: 27a943db80a7cce4faf37658c96d7740, type: 3}
   objectMaterial: {fileID: 2100000, guid: 8fb60badbaa4ae649a56f12d58386b1a, type: 2}
+  roomName: Bathroom

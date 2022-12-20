@@ -14,3 +14,4 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   icon: {fileID: -1163174096, guid: 27a943db80a7cce4faf37658c96d7740, type: 3}
   objectMaterial: {fileID: 2100000, guid: d0088e45804523549867166fd4706b95, type: 2}
+  roomName: LivingRoom

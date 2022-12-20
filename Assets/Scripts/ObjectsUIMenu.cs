@@ -241,7 +241,7 @@ public class ObjectsUIMenu : MonoBehaviour
     {
         if (clicked == true)  //hide menu
         {
-            StartCoroutine("Close");
+            if(gameObject.activeSelf) StartCoroutine("Close");
         }
     }
 

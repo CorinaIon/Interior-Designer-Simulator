@@ -8,4 +8,5 @@ public class MaterialObject : ScriptableObject
 {
     public Sprite icon;
     public Material objectMaterial;
+    public string roomName;
 }

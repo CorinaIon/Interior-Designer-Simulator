@@ -5,19 +5,7 @@ using UnityEngine;
 public class InstantiatedObject : MonoBehaviour
 {
     public bool isSelected = false;
-
-    // Start is called before the first frame update
-    void Start()
-    {
-        
-    }
-
-    // Update is called once per frame
-    void Update()
-    {
-        
-    }
-
+    public string roomName;
     public void OnSelectItem()
     {
         SceneEditUIManager.instance.GoToObjectEditPanel();

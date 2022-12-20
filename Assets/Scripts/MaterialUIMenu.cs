@@ -15,13 +15,14 @@ public class MaterialUIMenu : MonoBehaviour
 
         for (int i = 0; i < objectsArray.Length; i++)
         {
-            materialList.Add(objectsArray[i]);
+            fullMaterialList.Add(objectsArray[i]);
         }
     }
     #endregion
 
+    public List<MaterialObject> fullMaterialList = new List<MaterialObject>();
     public List<MaterialObject> materialList = new List<MaterialObject>();
-    
+
     public MaterialButton bttn1;
     public MaterialButton bttn2;
     public MaterialButton bttn3;
@@ -38,7 +39,7 @@ public class MaterialUIMenu : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
-        
+        //materialList = fullMaterialList;
         DisplayList();
         containerObject = transform.GetChild(0).gameObject;
         containerObject.SetActive(false);
@@ -49,9 +50,29 @@ public class MaterialUIMenu : MonoBehaviour
         bttn4.SetEvent(3);
     }
 
+    public void FilterList(string room)
+    {
+        bttn1.SetReference(null, -1);
+        bttn2.SetReference(null, -1);
+        bttn3.SetReference(null, -1);
+        bttn4.SetReference(null, -1);
+
+        this.materialList = new List<MaterialObject>();
+        foreach(MaterialObject mat in fullMaterialList)
+        {
+            if(mat.roomName == room || room == "*" || mat.roomName == "*")
+            {
+                this.materialList.Add(mat);//Debug.Log(mat.name);
+            }
+        }
+        //Debug.Log(materialList.Count);
+        DisplayList();
+    }
+
     
     public void DisplayList()
     {
+        
         index = 0;
         if (materialList == null || materialList.Count == 0)
         {

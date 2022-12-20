@@ -11,6 +11,7 @@ GameObject:
   - component: {fileID: 466108}
   - component: {fileID: 3346714}
   - component: {fileID: 2313206}
+  - component: {fileID: -307251704716859990}
   m_Layer: 0
   m_Name: Table_1
   m_TagString: Untagged
@@ -83,3 +84,17 @@ MeshRenderer:
   m_SortingLayer: 0
   m_SortingOrder: 0
   m_AdditionalVertexStreams: {fileID: 0}
+--- !u!114 &-307251704716859990
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 144772}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 650a08e1e9b3c1d48b6580960d61576e, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  isSelected: 0
+  roomName: Bedroom

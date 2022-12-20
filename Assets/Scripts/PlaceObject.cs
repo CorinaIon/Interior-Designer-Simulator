@@ -77,13 +77,12 @@ public class PlaceObject : MonoBehaviour
         m_currentSelection.GetComponent<LeanPinchScale>().Use.RequiredFingerCount = 2;
         //m_currentSelection.GetComponent<LeanTwistRotateAxis>().Use.RequiredFingerCount = 2;
 
-        m_currentSelection.AddComponent<ColorChange>();
-        m_currentSelection.AddComponent<MaterialChange>();
-
         selected.GetComponent<InstantiatedObject>().OnSelectItem();
         selected.GetComponent<ColorChange>().colorPicker = SceneEditUIManager.instance.pickerInstance;
         selected.GetComponent<ColorChange>().Initialize();
         selected.GetComponent<MaterialChange>().Initialize();
+        string str = selected.GetComponent<InstantiatedObject>().roomName;
+        MaterialUIMenu.instance.FilterList(str);
     }
 
     // Remove translation, rotation and scaling scripts for previously selected object
@@ -279,7 +278,7 @@ public class PlaceObject : MonoBehaviour
 
         if(!m_isDeleteHovered)
         {
-            var auxName = data.selectedObject.GetComponent<ObjectButton>().objectReference.name; Debug.Log(auxName);
+            var auxName = data.selectedObject.GetComponent<ObjectButton>().objectReference.name; //Debug.Log(auxName);
             var prefabToAdd = m_nameToPrefab[auxName]; //data.selectedObject.name
             AddObject(prefabToAdd);
         }
@@ -320,10 +319,12 @@ public class PlaceObject : MonoBehaviour
         // Add a new object in scene
         var spawnedObject = Instantiate(prefabToAdd, position, prefabToAdd.transform.rotation);
         spawnedObject.transform.localScale /= 10.0f;
-        spawnedObject.AddComponent<InstantiatedObject>();
+        
+        //spawnedObject.AddComponent<InstantiatedObject>();
 
         m_addedObjects.Add(spawnedObject);
-
+        spawnedObject.AddComponent<ColorChange>();
+        spawnedObject.AddComponent<MaterialChange>();
         SelectObject(spawnedObject);
     }
 
