@@ -12,9 +12,10 @@ GameObject:
   - component: {fileID: 3367294}
   - component: {fileID: 2389476}
   - component: {fileID: -4529489290560288743}
+  - component: {fileID: 2228655437608054142}
   m_Layer: 0
   m_Name: Pillow_1
-  m_TagString: Untagged
+  m_TagString: Manipulated
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -98,3 +99,16 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   isSelected: 0
   roomName: Bedroom
+--- !u!65 &2228655437608054142
+BoxCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 110870}
+  m_Material: {fileID: 0}
+  m_IsTrigger: 0
+  m_Enabled: 1
+  serializedVersion: 2
+  m_Size: {x: 0.018827207, y: 0.01266023, z: 0.016186817}
+  m_Center: {x: 0.00006741611, y: 0.0031009926, z: 0.0013687216}

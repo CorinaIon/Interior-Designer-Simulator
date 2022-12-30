@@ -12,9 +12,10 @@ GameObject:
   - component: {fileID: 3314880}
   - component: {fileID: 2342062}
   - component: {fileID: -2172733558620546714}
+  - component: {fileID: 8205903661000937525}
   m_Layer: 0
   m_Name: Books_1_2
-  m_TagString: Untagged
+  m_TagString: Manipulated
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -98,3 +99,16 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   isSelected: 0
   roomName: LivingRoom
+--- !u!65 &8205903661000937525
+BoxCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 155586}
+  m_Material: {fileID: 0}
+  m_IsTrigger: 0
+  m_Enabled: 1
+  serializedVersion: 2
+  m_Size: {x: 0.018698953, y: 0.022808492, z: 0.0065014204}
+  m_Center: {x: -0.000000007270413, y: -9.2780406e-10, z: 0.0034443473}

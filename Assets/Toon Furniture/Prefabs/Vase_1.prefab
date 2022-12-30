@@ -12,9 +12,10 @@ GameObject:
   - component: {fileID: 3394632}
   - component: {fileID: 2392926}
   - component: {fileID: -6968784318117788378}
+  - component: {fileID: 794464829257612682}
   m_Layer: 0
   m_Name: Vase_1
-  m_TagString: Untagged
+  m_TagString: Manipulated
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -98,3 +99,16 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   isSelected: 0
   roomName: Kitchen
+--- !u!65 &794464829257612682
+BoxCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 111804}
+  m_Material: {fileID: 0}
+  m_IsTrigger: 0
+  m_Enabled: 1
+  serializedVersion: 2
+  m_Size: {x: 0.028088383, y: 0.02808838, z: 0.03315252}
+  m_Center: {x: 0, y: -1.2232535e-16, z: 0.017215759}

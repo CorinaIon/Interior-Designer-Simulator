@@ -12,9 +12,10 @@ GameObject:
   - component: {fileID: 3346714}
   - component: {fileID: 2313206}
   - component: {fileID: -307251704716859990}
+  - component: {fileID: 5679760137788556193}
   m_Layer: 0
   m_Name: Table_1
-  m_TagString: Untagged
+  m_TagString: Manipulated
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -98,3 +99,16 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   isSelected: 0
   roomName: Bedroom
+--- !u!65 &5679760137788556193
+BoxCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 144772}
+  m_Material: {fileID: 0}
+  m_IsTrigger: 0
+  m_Enabled: 1
+  serializedVersion: 2
+  m_Size: {x: 0.08442432, y: 0.052468773, z: 0.030886099}
+  m_Center: {x: 0, y: 1.090866e-16, z: 0.015352571}

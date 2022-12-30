@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 using System.IO;
+using TMPro;
 
 public class ScreenShot : MonoBehaviour
 {
@@ -15,6 +16,8 @@ public class ScreenShot : MonoBehaviour
     public float timeCloseScreenshotPreview = 1.5f;
     public GameObject screenshotImage;
     public Animator animator;
+    public TextMeshProUGUI m_Text;
+
     public void ScreenshotPressed()
     {
         if (!isProcessing)
@@ -48,6 +51,7 @@ public class ScreenShot : MonoBehaviour
 
         File.WriteAllBytes(destination, dataToSave);
         Debug.Log("Screenshot captured at: " + destination);
+        m_Text.text = "Screenshot captured at: " + destination;
 
         // Play sound here
         // TODO maybe?

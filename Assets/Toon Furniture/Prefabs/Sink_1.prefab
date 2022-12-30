@@ -12,9 +12,10 @@ GameObject:
   - component: {fileID: 3312964}
   - component: {fileID: 2330144}
   - component: {fileID: 2234115226952869581}
+  - component: {fileID: 355076725591842214}
   m_Layer: 0
   m_Name: Sink_1
-  m_TagString: Untagged
+  m_TagString: Manipulated
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -98,3 +99,16 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   isSelected: 0
   roomName: Bathroom
+--- !u!65 &355076725591842214
+BoxCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 110918}
+  m_Material: {fileID: 0}
+  m_IsTrigger: 0
+  m_Enabled: 1
+  serializedVersion: 2
+  m_Size: {x: 0.0212754, y: 0.018293917, z: 0.027254881}
+  m_Center: {x: -4.6566134e-10, y: -0.00029560778, z: 0.018848363}

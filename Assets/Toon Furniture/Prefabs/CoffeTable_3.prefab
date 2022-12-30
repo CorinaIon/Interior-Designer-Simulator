@@ -12,9 +12,10 @@ GameObject:
   - component: {fileID: 3368070}
   - component: {fileID: 2346500}
   - component: {fileID: 6903890385158307688}
+  - component: {fileID: 1359525288097253472}
   m_Layer: 0
   m_Name: CoffeTable_3
-  m_TagString: Untagged
+  m_TagString: Manipulated
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -98,3 +99,16 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   isSelected: 0
   roomName: LivingRoom
+--- !u!65 &1359525288097253472
+BoxCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 184304}
+  m_Material: {fileID: 0}
+  m_IsTrigger: 0
+  m_Enabled: 1
+  serializedVersion: 2
+  m_Size: {x: 0.021071436, y: 0.021340199, z: 0.4084515}
+  m_Center: {x: -4.6566126e-10, y: -9.3132246e-10, z: 0.2030817}

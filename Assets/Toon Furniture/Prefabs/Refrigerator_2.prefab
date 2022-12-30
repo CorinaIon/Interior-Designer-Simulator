@@ -12,9 +12,10 @@ GameObject:
   - component: {fileID: 3353974}
   - component: {fileID: 2315768}
   - component: {fileID: 6188299847131014690}
+  - component: {fileID: 2568009775465548643}
   m_Layer: 0
   m_Name: Refrigerator_2
-  m_TagString: Untagged
+  m_TagString: Manipulated
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -98,3 +99,16 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   isSelected: 0
   roomName: Kitchen
+--- !u!65 &2568009775465548643
+BoxCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 112080}
+  m_Material: {fileID: 0}
+  m_IsTrigger: 0
+  m_Enabled: 1
+  serializedVersion: 2
+  m_Size: {x: 0.020000007, y: 0.016380962, z: 0.044311754}
+  m_Center: {x: -4.656613e-10, y: 0.0003263568, z: 0.022125721}

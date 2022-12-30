@@ -6,11 +6,21 @@ using Lean.Touch;
 using TMPro;
 using UnityEngine.EventSystems;
 
+
+
 [RequireComponent(typeof(ARRaycastManager))]
 public class PlaceObject : MonoBehaviour
 {
+    #region Singleton PlaceObject
+    public static PlaceObject instance;
+    //private void Awake()
+    //{
+    //    instance = this;
+    //}
+    #endregion
+
     static List<ARRaycastHit> s_Hits = new List<ARRaycastHit>();
-    ARRaycastManager m_raycastManager;
+    public ARRaycastManager m_raycastManager;
 
     // The first-person camera being used to render the passthrough camera image (i.e. AR background)
     public Camera m_firstPersonCamera;
@@ -19,7 +29,7 @@ public class PlaceObject : MonoBehaviour
     public GameObject m_currentSelection = null;
 
     bool m_doubleTap = false;
-    float m_lastTapTime;
+    float m_lastTapTime = 0;
 
     List<GameObject> m_addedObjects;
     
@@ -44,8 +54,13 @@ public class PlaceObject : MonoBehaviour
     public TextMeshProUGUI m_debugTextPermanent;
     private bool m_isDeleteHovered = false;
 
+    public bool snap = false;
+    public TextMeshProUGUI m_snapText;
+
     void Awake()
     {
+        instance = this;
+
         m_raycastManager = GetComponent<ARRaycastManager>();
         m_addedObjects = new List<GameObject>();
         m_debugText.text = "Debug";
@@ -69,7 +84,8 @@ public class PlaceObject : MonoBehaviour
         m_currentSelection = selected;
 
         // Add the translation, rotation and scaling scripts to the current objects
-        m_currentSelection.AddComponent<LeanDragTranslate>();
+       // m_currentSelection.AddComponent<LeanDragTranslate>();
+        m_currentSelection.AddComponent<DragObject>();
         m_currentSelection.AddComponent<LeanPinchScale>();
         //m_currentSelection.AddComponent<LeanTwistRotateAxis>();
 
@@ -91,9 +107,13 @@ public class PlaceObject : MonoBehaviour
         if (m_currentSelection != null)
         {
             // Destroy LeanDragTranslate, LeanPinchScale and LeanTwistRotateAxis components for previously selected object
-            if (m_currentSelection.GetComponent<LeanDragTranslate>())
+            //if (m_currentSelection.GetComponent<LeanDragTranslate>())
+            //{
+            //    Destroy(m_currentSelection.GetComponent<LeanDragTranslate>());
+            //}
+            if (m_currentSelection.GetComponent<DragObject>())
             {
-                Destroy(m_currentSelection.GetComponent<LeanDragTranslate>());
+                Destroy(m_currentSelection.GetComponent<DragObject>());
             }
             if (m_currentSelection.GetComponent<LeanPinchScale>())
             {
@@ -130,7 +150,67 @@ public class PlaceObject : MonoBehaviour
     }
 
     // Check if the user has tapped on screen. Check if an object was selected
-    bool HandleTouch(out Vector2 touchPosition)
+    //bool HandleTouch(out Vector2 touchPosition)
+    //{
+    //    Touch touch;
+    //    if (Input.touchCount < 1 || (touch = Input.GetTouch(0)).phase != TouchPhase.Began)
+    //    {
+    //        touchPosition = default;
+    //        return false;
+    //    }
+
+    //    if (Input.touchCount > 0)
+    //    {
+    //        touchPosition = Input.GetTouch(0).position;
+
+    //        Ray ray = m_firstPersonCamera.ScreenPointToRay(touchPosition);
+    //        RaycastHit hitObject = new RaycastHit();
+
+    //        // Check if a 3D object was hit
+    //        // Check if 3D object was tapped
+    //        //if (true)
+    //        if (Physics.Raycast(ray, out hitObject))
+    //        {
+    //            //m_debugText.text = "\n Hit Tag " + hitObject.transform.tag + ", name: " + hitObject.transform.name;
+    //            if (hitObject.transform.tag == "Manipulated")
+    //            {
+    //                //m_lastTapTime = Time.time;
+
+    //                //if (hitObject.transform.gameObject != m_currentSelection)
+    //                //{
+    //                //    m_doubleTap = false;
+    //                //}
+    //                //else
+    //                //{
+    //                //    // Check if a small amount of time has passed since the last tap on the same object
+    //                //    if (Time.time < m_lastTapTime + 0.3f)
+    //                //    {
+    //                //        m_doubleTap = true;
+    //                //    }
+    //                //}
+
+    //                //// If double tap event occured, change translation time
+    //                //if (m_doubleTap)
+    //                //{
+    //                //    m_doubleTap = false;
+    //                //    // Call function which adds the scripts for object manipulation
+    //                //    SelectObject(hitObject.transform.gameObject);
+
+    //                //    m_debugText.text = "DoubleTap" + m_debugText.text;
+    //                //}
+
+    //                touchPosition = default;
+    //                return false;
+    //            }
+    //        }
+    //        return true;
+    //    }
+
+    //    touchPosition = default;
+    //    return false;
+    //}
+
+    bool CheckDoubleTap(out Vector2 touchPosition)
     {
         Touch touch;
         if (Input.touchCount < 1 || (touch = Input.GetTouch(0)).phase != TouchPhase.Began)
@@ -154,31 +234,23 @@ public class PlaceObject : MonoBehaviour
                 m_debugText.text = "\n Hit Tag " + hitObject.transform.tag + ", name: " + hitObject.transform.name;
                 if (hitObject.transform.tag == "Manipulated")
                 {
-                    m_lastTapTime = Time.time;
-
-                    if (hitObject.transform.gameObject != m_currentSelection)
+                    // Check if a small amount of time has passed since the last tap
+                    if (Time.time > m_lastTapTime + 0.3f)
                     {
-                        m_doubleTap = false;
-                    }
-                    else
-                    {
-                        // Check if a small amount of time has passed since the last tap on the same object
-                        if (Time.time < m_lastTapTime + 0.3f)
-                        {
-                            m_doubleTap = true;
-                        }
+                        m_doubleTap = true;
                     }
 
-                    // If double tap event occured, change translation time
+                    // If double tap event occured
                     if (m_doubleTap)
                     {
-                        m_doubleTap = false;
                         // Call function which adds the scripts for object manipulation
                         SelectObject(hitObject.transform.gameObject);
 
+                        m_doubleTap = false;
                         m_debugText.text = "DoubleTap" + m_debugText.text;
                     }
 
+                    m_lastTapTime = Time.time;
                     touchPosition = default;
                     return false;
                 }
@@ -218,11 +290,16 @@ public class PlaceObject : MonoBehaviour
 
         if (m_currentSelection != null)
         {
-            if (!HandleTouch(out Vector2 m222222222222_touchPosition))
-            {
-                return;
-            }
+            //if (!HandleTouch(out Vector2 m222222222222_touchPosition))
+            //{
+            //    return;
+            //}
         }
+        else
+        {
+            CheckDoubleTap(out Vector2 m2222222222223333333_touchPosition);
+        }
+        
 
         //TODO. Sau altceva care sa evidentieze obiectul selectat.
         DrawBoundingBox();
@@ -373,5 +450,9 @@ public class PlaceObject : MonoBehaviour
         m_currentSelection.transform.Rotate(0, amount * direction, 0, Space.World);
     }
 
-
+    public void SwitchSnapMode()
+    {
+        snap = !snap;
+        m_snapText.text = "Snap: " + snap.ToString();
+    }
 }

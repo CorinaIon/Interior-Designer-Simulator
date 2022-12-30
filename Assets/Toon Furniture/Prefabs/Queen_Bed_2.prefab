@@ -10,9 +10,10 @@ GameObject:
   m_Component:
   - component: {fileID: 457618}
   - component: {fileID: 5618652744773254912}
+  - component: {fileID: 7000059702514501895}
   m_Layer: 0
   m_Name: Queen_Bed_2
-  m_TagString: Untagged
+  m_TagString: Manipulated
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -50,6 +51,19 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   isSelected: 0
   roomName: Bedroom
+--- !u!65 &7000059702514501895
+BoxCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 110820}
+  m_Material: {fileID: 0}
+  m_IsTrigger: 0
+  m_Enabled: 1
+  serializedVersion: 2
+  m_Size: {x: 3, y: 2.5, z: 4}
+  m_Center: {x: 0, y: 1.2, z: 0}
 --- !u!1 &143726
 GameObject:
   m_ObjectHideFlags: 0

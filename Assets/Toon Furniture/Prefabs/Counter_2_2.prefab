@@ -12,9 +12,10 @@ GameObject:
   - component: {fileID: 3301068}
   - component: {fileID: 2301718}
   - component: {fileID: -7735679942654918165}
+  - component: {fileID: 9092684196639502899}
   m_Layer: 0
   m_Name: Counter_2_2
-  m_TagString: Untagged
+  m_TagString: Manipulated
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -98,3 +99,16 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   isSelected: 0
   roomName: Kitchen
+--- !u!65 &9092684196639502899
+BoxCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 158066}
+  m_Material: {fileID: 0}
+  m_IsTrigger: 0
+  m_Enabled: 1
+  serializedVersion: 2
+  m_Size: {x: 0.020000007, y: 0.0140928775, z: 0.016966704}
+  m_Center: {x: 4.656613e-10, y: 0.0012002103, z: 0.0460211}

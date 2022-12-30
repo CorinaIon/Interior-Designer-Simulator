@@ -12,9 +12,10 @@ GameObject:
   - component: {fileID: 3324074}
   - component: {fileID: 2368052}
   - component: {fileID: -4603202479661738124}
+  - component: {fileID: 4299614893216645007}
   m_Layer: 0
   m_Name: Chair_7
-  m_TagString: Untagged
+  m_TagString: Manipulated
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -98,3 +99,16 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   isSelected: 0
   roomName: LivingRoom
+--- !u!65 &4299614893216645007
+BoxCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 109700}
+  m_Material: {fileID: 0}
+  m_IsTrigger: 0
+  m_Enabled: 1
+  serializedVersion: 2
+  m_Size: {x: 0.021514993, y: 0.025389658, z: 0.04755253}
+  m_Center: {x: 0, y: 0.0015567857, z: 0.023746189}
