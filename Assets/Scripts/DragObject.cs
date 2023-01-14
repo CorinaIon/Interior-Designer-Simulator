@@ -8,7 +8,6 @@ using UnityEngine.XR.ARFoundation;
 public class DragObject : MonoBehaviour
 {
     private Touch touch;
-    private float speedModifier;
 
     public TextMeshProUGUI m_debugText;
     static List<ARRaycastHit> s_Hits = new List<ARRaycastHit>();
@@ -16,7 +15,6 @@ public class DragObject : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
-        speedModifier = 0.001f;
         var o = GameObject.Find("Locatia");
         m_debugText = o != null ? o.GetComponent<TextMeshProUGUI>() : null;
     }
@@ -48,8 +46,6 @@ public class DragObject : MonoBehaviour
             // Add the deltaPosition
             screenPoint += (Vector3)screenDelta * sensitivity;
 
-            string tagName = " - ";
-            string nameN = " - ";
             Vector3 pos = touch.position;
 
             Ray ray = PlaceObject.instance.m_firstPersonCamera.ScreenPointToRay(pos);

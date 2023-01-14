@@ -5,6 +5,7 @@ using UnityEngine.XR.ARSubsystems;
 using Lean.Touch;
 using TMPro;
 using UnityEngine.EventSystems;
+using UnityEngine.UI;
 
 
 
@@ -21,41 +22,28 @@ public class PlaceObject : MonoBehaviour
 
     static List<ARRaycastHit> s_Hits = new List<ARRaycastHit>();
     public ARRaycastManager m_raycastManager;
-
     // The first-person camera being used to render the passthrough camera image (i.e. AR background)
     public Camera m_firstPersonCamera;
-
     // The object instantiated as a result of a successful raycast intersection with a plane
     public GameObject m_currentSelection = null;
-
     bool m_doubleTap = false;
     float m_lastTapTime;
-
     List<GameObject> m_addedObjects;
-    
     [SerializeField]
     public Dictionary<string, GameObject> m_nameToPrefab;
-    //nu e frumos asa..
     public GameObject prefabCube;
-
     public Vector2 m_touchPosition;
-
     public Canvas m_canvas;
     public GameObject m_inventoryParent;
     public GameObject m_newUI;
-
     public GameObject m_movingObject;
-
-    //TODO dinamic puse eventual, nu direct din inspector. 
     public List<GameObject> m_menuButtons;
-
+    private bool m_isDeleteHovered = false;
+    public bool snap = false;
+    public Button trashButton;
 
     public TextMeshProUGUI m_debugText;
-    public TextMeshProUGUI m_debugText2;
     public TextMeshProUGUI m_debugTextPermanent;
-    private bool m_isDeleteHovered = false;
-
-    public bool snap = false;
     public TextMeshProUGUI m_snapText;
 
     void Awake()
@@ -69,7 +57,6 @@ public class PlaceObject : MonoBehaviour
 
         //add from inventar
         //m_nameToPrefab["Cube"] = prefabCube;
-        
     }
 
     private void Start()
@@ -85,15 +72,12 @@ public class PlaceObject : MonoBehaviour
 
         m_currentSelection = selected;
 
-        // Add the translation, rotation and scaling scripts to the current objects
-       // m_currentSelection.AddComponent<LeanDragTranslate>();
+        // Add the translation and scaling scripts to the current objects
         m_currentSelection.AddComponent<DragObject>();
         m_currentSelection.AddComponent<LeanPinchScale>();
-        //m_currentSelection.AddComponent<LeanTwistRotateAxis>();
 
         // Pinch and twist gestures require two fingers on screen
         m_currentSelection.GetComponent<LeanPinchScale>().Use.RequiredFingerCount = 2;
-        //m_currentSelection.GetComponent<LeanTwistRotateAxis>().Use.RequiredFingerCount = 2;
 
         selected.GetComponent<InstantiatedObject>().OnSelectItem();
         selected.GetComponent<ColorChange>().colorPicker = SceneEditUIManager.instance.pickerInstance;
@@ -108,11 +92,7 @@ public class PlaceObject : MonoBehaviour
     {
         if (m_currentSelection != null)
         {
-            // Destroy LeanDragTranslate, LeanPinchScale and LeanTwistRotateAxis components for previously selected object
-            //if (m_currentSelection.GetComponent<LeanDragTranslate>())
-            //{
-            //    Destroy(m_currentSelection.GetComponent<LeanDragTranslate>());
-            //}
+            // Destroy DragObject and LeanPinchScale components for previously selected object
             if (m_currentSelection.GetComponent<DragObject>())
             {
                 Destroy(m_currentSelection.GetComponent<DragObject>());
@@ -121,10 +101,6 @@ public class PlaceObject : MonoBehaviour
             {
                 Destroy(m_currentSelection.GetComponent<LeanPinchScale>());
             }
-            //if (m_currentSelection.GetComponent<LeanTwistRotateAxis>())
-            //{
-            //    Destroy(m_currentSelection.GetComponent<LeanTwistRotateAxis>());
-            //}
             m_currentSelection.GetComponent<InstantiatedObject>().OnDeselectItem();
 
             m_currentSelection = null;
@@ -151,67 +127,6 @@ public class PlaceObject : MonoBehaviour
         return false;
     }
 
-    // Check if the user has tapped on screen. Check if an object was selected
-    //bool HandleTouch(out Vector2 touchPosition)
-    //{
-    //    Touch touch;
-    //    if (Input.touchCount < 1 || (touch = Input.GetTouch(0)).phase != TouchPhase.Began)
-    //    {
-    //        touchPosition = default;
-    //        return false;
-    //    }
-
-    //    if (Input.touchCount > 0)
-    //    {
-    //        touchPosition = Input.GetTouch(0).position;
-
-    //        Ray ray = m_firstPersonCamera.ScreenPointToRay(touchPosition);
-    //        RaycastHit hitObject = new RaycastHit();
-
-    //        // Check if a 3D object was hit
-    //        // Check if 3D object was tapped
-    //        //if (true)
-    //        if (Physics.Raycast(ray, out hitObject))
-    //        {
-    //            //m_debugText.text = "\n Hit Tag " + hitObject.transform.tag + ", name: " + hitObject.transform.name;
-    //            if (hitObject.transform.tag == "Manipulated")
-    //            {
-    //                //m_lastTapTime = Time.time;
-
-    //                //if (hitObject.transform.gameObject != m_currentSelection)
-    //                //{
-    //                //    m_doubleTap = false;
-    //                //}
-    //                //else
-    //                //{
-    //                //    // Check if a small amount of time has passed since the last tap on the same object
-    //                //    if (Time.time < m_lastTapTime + 0.3f)
-    //                //    {
-    //                //        m_doubleTap = true;
-    //                //    }
-    //                //}
-
-    //                //// If double tap event occured, change translation time
-    //                //if (m_doubleTap)
-    //                //{
-    //                //    m_doubleTap = false;
-    //                //    // Call function which adds the scripts for object manipulation
-    //                //    SelectObject(hitObject.transform.gameObject);
-
-    //                //    m_debugText.text = "DoubleTap" + m_debugText.text;
-    //                //}
-
-    //                touchPosition = default;
-    //                return false;
-    //            }
-    //        }
-    //        return true;
-    //    }
-
-    //    touchPosition = default;
-    //    return false;
-    //}
-
     bool CheckDoubleTap(out Vector2 touchPosition)
     {
         Touch touch;
@@ -228,12 +143,9 @@ public class PlaceObject : MonoBehaviour
             Ray ray = m_firstPersonCamera.ScreenPointToRay(touchPosition);
             RaycastHit hitObject = new RaycastHit();
 
-            // Check if a 3D object was hit
             // Check if 3D object was tapped
-            //if (true)
             if (Physics.Raycast(ray, out hitObject))
             {
-                m_debugText.text = "\n Hit Tag " + hitObject.transform.tag + ", name: " + hitObject.transform.name;
                 if (hitObject.transform.tag == "Manipulated")
                 {
                     // Check if a small amount of time has passed since the last tap
@@ -249,11 +161,9 @@ public class PlaceObject : MonoBehaviour
                         SelectObject(hitObject.transform.gameObject);
 
                         m_doubleTap = false;
-                        m_debugText.text = "DoubleTap" + m_debugText.text;
                     }
 
                     m_lastTapTime = Time.time;
-                    m_debugText2.text += " " + m_lastTapTime.ToString();
                     touchPosition = default;
                     return false;
                 }
@@ -268,7 +178,8 @@ public class PlaceObject : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        
+
+        m_debugTextPermanent.text = m_isDeleteHovered.ToString();
         m_touchPosition = default;
         if (Input.touchCount < 1)
         {
@@ -287,7 +198,6 @@ public class PlaceObject : MonoBehaviour
             }
         }
 
-        m_debugTextPermanent.text = m_isDeleteHovered.ToString();
         //m_debugTextPermanent.text = "cS: " + ((m_currentSelection != null) ? m_currentSelection.name : "") +
         //    "\nmo: " + m_movingObject + "\ntp: " + m_touchPosition;
 
@@ -303,7 +213,6 @@ public class PlaceObject : MonoBehaviour
             CheckDoubleTap(out Vector2 m2222222222223333333_touchPosition);
         }
         
-
         //TODO. Sau altceva care sa evidentieze obiectul selectat.
         DrawBoundingBox();
 
@@ -318,6 +227,7 @@ public class PlaceObject : MonoBehaviour
         m_currentSelection = null;
         m_debugText.text = "Deleted";
         SceneEditUIManager.instance.GoToMainEditPanel();
+        m_isDeleteHovered = false;
     }
 
     public void DeleteAll()
@@ -328,7 +238,7 @@ public class PlaceObject : MonoBehaviour
         m_addedObjects.Clear();
         m_movingObject = null;
         m_currentSelection = null;
-
+        m_isDeleteHovered = false;
     }
 
     public void StartAddingObject(BaseEventData data)
@@ -359,12 +269,16 @@ public class PlaceObject : MonoBehaviour
 
         if(!m_isDeleteHovered)
         {
+            m_debugText.color = Color.cyan;
             var auxName = data.selectedObject.GetComponent<ObjectButton>().objectReference.name; //Debug.Log(auxName);
             var prefabToAdd = m_nameToPrefab[auxName]; //data.selectedObject.name
             AddObject(prefabToAdd);
         }
         // else currentSelection remains null, nothing is added.
-        
+        else
+        {
+            m_debugText.color = Color.magenta;
+        }
         Destroy(m_movingObject);
         m_movingObject = null;
         
@@ -448,11 +362,14 @@ public class PlaceObject : MonoBehaviour
     public void DeleteEnterPointer()
     {
         m_isDeleteHovered = true;
+        if(m_currentSelection == null)
+            trashButton.image.color = Color.green;
     }
 
     public void DeleteExitPointer()
     {
         m_isDeleteHovered = false;
+        trashButton.image.color = Color.red;
     }
 
     public void Rotate(int direction)
