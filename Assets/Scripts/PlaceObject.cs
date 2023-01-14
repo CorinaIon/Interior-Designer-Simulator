@@ -29,7 +29,7 @@ public class PlaceObject : MonoBehaviour
     public GameObject m_currentSelection = null;
 
     bool m_doubleTap = false;
-    float m_lastTapTime = 0;
+    float m_lastTapTime;
 
     List<GameObject> m_addedObjects;
     
@@ -51,6 +51,7 @@ public class PlaceObject : MonoBehaviour
 
 
     public TextMeshProUGUI m_debugText;
+    public TextMeshProUGUI m_debugText2;
     public TextMeshProUGUI m_debugTextPermanent;
     private bool m_isDeleteHovered = false;
 
@@ -236,7 +237,7 @@ public class PlaceObject : MonoBehaviour
                 if (hitObject.transform.tag == "Manipulated")
                 {
                     // Check if a small amount of time has passed since the last tap
-                    if (Time.time > m_lastTapTime + 0.3f)
+                    if (Time.time < m_lastTapTime + 0.3f)
                     {
                         m_doubleTap = true;
                     }
@@ -252,6 +253,7 @@ public class PlaceObject : MonoBehaviour
                     }
 
                     m_lastTapTime = Time.time;
+                    m_debugText2.text += " " + m_lastTapTime.ToString();
                     touchPosition = default;
                     return false;
                 }
@@ -398,7 +400,14 @@ public class PlaceObject : MonoBehaviour
         // Add a new object in scene
         var spawnedObject = Instantiate(prefabToAdd, position, prefabToAdd.transform.rotation);
         spawnedObject.transform.localScale /= 10.0f;
-        
+
+        ////obsolete
+        ///* TODO 2.2 Attach an anchor to the prefab (Hint! Use AddAnchor method from arAnchorManager object) */
+        //ARAnchor anchor = arAnchorManager.AddAnchor(new Pose(spawnedObject.transform.position, spawnedObject.transform.rotation));
+        //spawnedObject.transform.parent = anchor.transform;
+        ARAnchor anchor = spawnedObject.AddComponent<ARAnchor>();
+        /* Send anchor to ARCloudAnchorManager */
+        ARCloudAnchorManager.Instance.QueueAnchor(anchor);
         //spawnedObject.AddComponent<InstantiatedObject>();
 
         m_addedObjects.Add(spawnedObject);
@@ -458,5 +467,12 @@ public class PlaceObject : MonoBehaviour
         m_snapText.text = "Snap: " + snap.ToString();
         if (snap == true) SceneEditUIManager.instance.ChangeColorSnapButton(Color.green);
         else SceneEditUIManager.instance.ChangeColorSnapButton(Color.red);
+    }
+
+    public void RecreatePlacement(Transform transform)
+    {
+        var spawnedObject = Instantiate(prefabCube, transform.position, transform.rotation);
+        spawnedObject.transform.parent = transform;
+        m_debugText.text = "ancora repusa";
     }
 }
