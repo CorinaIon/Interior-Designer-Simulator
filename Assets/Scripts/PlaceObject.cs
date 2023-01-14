@@ -74,6 +74,7 @@ public class PlaceObject : MonoBehaviour
     private void Start()
     {
         m_nameToPrefab = ObjectsUIMenu.instance.GetItemDictionary();
+        SceneEditUIManager.instance.ChangeColorSnapButton(Color.red);
     }
 
     // Only the selected object should be able to be scaled, rotated or translated
@@ -314,6 +315,7 @@ public class PlaceObject : MonoBehaviour
         m_addedObjects.Remove(m_currentSelection);
         m_currentSelection = null;
         m_debugText.text = "Deleted";
+        SceneEditUIManager.instance.GoToMainEditPanel();
     }
 
     public void DeleteAll()
@@ -454,5 +456,7 @@ public class PlaceObject : MonoBehaviour
     {
         snap = !snap;
         m_snapText.text = "Snap: " + snap.ToString();
+        if (snap == true) SceneEditUIManager.instance.ChangeColorSnapButton(Color.green);
+        else SceneEditUIManager.instance.ChangeColorSnapButton(Color.red);
     }
 }

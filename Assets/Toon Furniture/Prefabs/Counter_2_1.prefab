@@ -13,6 +13,7 @@ GameObject:
   - component: {fileID: 2388466}
   - component: {fileID: -5363429608241126443}
   - component: {fileID: 5355938891761967257}
+  - component: {fileID: 6205261238307106599}
   m_Layer: 0
   m_Name: Counter_2_1
   m_TagString: Manipulated
@@ -112,3 +113,19 @@ BoxCollider:
   serializedVersion: 2
   m_Size: {x: 0.020000009, y: 0.020381255, z: 0.024524543}
   m_Center: {x: 0, y: -0.00066862936, z: 0.012262272}
+--- !u!54 &6205261238307106599
+Rigidbody:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 174636}
+  serializedVersion: 2
+  m_Mass: 1
+  m_Drag: 0
+  m_AngularDrag: 0.05
+  m_UseGravity: 0
+  m_IsKinematic: 0
+  m_Interpolate: 0
+  m_Constraints: 126
+  m_CollisionDetection: 3

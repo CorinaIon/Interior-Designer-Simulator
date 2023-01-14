@@ -11,6 +11,7 @@ GameObject:
   - component: {fileID: 457618}
   - component: {fileID: 5618652744773254912}
   - component: {fileID: 7000059702514501895}
+  - component: {fileID: 488255209143698492}
   m_Layer: 0
   m_Name: Queen_Bed_2
   m_TagString: Manipulated
@@ -64,6 +65,22 @@ BoxCollider:
   serializedVersion: 2
   m_Size: {x: 3, y: 2.5, z: 4}
   m_Center: {x: 0, y: 1.2, z: 0}
+--- !u!54 &488255209143698492
+Rigidbody:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 110820}
+  serializedVersion: 2
+  m_Mass: 1
+  m_Drag: 0
+  m_AngularDrag: 0.05
+  m_UseGravity: 0
+  m_IsKinematic: 0
+  m_Interpolate: 0
+  m_Constraints: 126
+  m_CollisionDetection: 3
 --- !u!1 &143726
 GameObject:
   m_ObjectHideFlags: 0

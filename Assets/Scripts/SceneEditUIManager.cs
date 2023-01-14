@@ -1,6 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.UI;
 using UnityEngine.SceneManagement;
 
 public class SceneEditUIManager : MonoBehaviour
@@ -19,7 +20,7 @@ public class SceneEditUIManager : MonoBehaviour
     public GameObject settingsPanel;
     public GameObject exitEditPanel;
     public ColorPicker pickerInstance;
-
+    public Button snapButton;
     private void Start()
     {
         pickerInstance = ColorPicker.instanceColorPicker;
@@ -83,5 +84,10 @@ public class SceneEditUIManager : MonoBehaviour
     public void LoadMainmenu()
     {
         SceneManager.LoadScene("MainMenu", LoadSceneMode.Single);
+    }
+
+    public void ChangeColorSnapButton(Color color)
+    {
+        snapButton.image.color = color;
     }
 }

@@ -18,7 +18,7 @@ public class DragObject : MonoBehaviour
     {
         speedModifier = 0.001f;
         var o = GameObject.Find("Locatia");
-        m_debugText = o.GetComponent<TextMeshProUGUI>();
+        m_debugText = o != null ? o.GetComponent<TextMeshProUGUI>() : null;
     }
 
     // Update is called once per frame
@@ -67,13 +67,13 @@ public class DragObject : MonoBehaviour
                     if (snap && PlaceObject.instance.m_raycastManager.Raycast(pos, s_Hits, TrackableType.PlaneWithinPolygon))
                     {
                         transform.position = s_Hits[0].pose.position;
-                        m_debugText.text = "a mers";
+                       // m_debugText.text = "a mers";
                     }
                     else
                     {
                         // Convert back to world space
                         transform.position = Camera.current.ScreenToWorldPoint(screenPoint);
-                        m_debugText.text = "nu a mers";
+                       // m_debugText.text = "nu a mers";
                     }
                     
                 }
