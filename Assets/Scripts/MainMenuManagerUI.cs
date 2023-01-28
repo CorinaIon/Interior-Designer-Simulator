@@ -11,7 +11,7 @@ public class MainMenuManagerUI : MonoBehaviour
 
     public void LoadSavedScenes()
     {
-        SceneManager.LoadScene("SavedScenes", LoadSceneMode.Single);
+        SceneManager.LoadScene("SceneManagement", LoadSceneMode.Single);
     }
 
     public void LoadGallery()

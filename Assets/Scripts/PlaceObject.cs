@@ -45,7 +45,7 @@ public class PlaceObject : MonoBehaviour
     public TextMeshProUGUI m_debugText;
     public TextMeshProUGUI m_debugTextPermanent;
     public TextMeshProUGUI m_snapText;
-
+    public GameObject parentForCreation;
     void Awake()
     {
         instance = this;
@@ -66,7 +66,7 @@ public class PlaceObject : MonoBehaviour
     }
 
     // Only the selected object should be able to be scaled, rotated or translated
-    void SelectObject(GameObject selected)
+    public void SelectObject(GameObject selected)
     {
         DeselectObject();
 
@@ -85,10 +85,12 @@ public class PlaceObject : MonoBehaviour
         selected.GetComponent<MaterialChange>().Initialize();
         string str = selected.GetComponent<InstantiatedObject>().roomName;
         MaterialUIMenu.instance.FilterList(str);
+
+        ARCloudAnchorManager.Instance.QueueAnchor(selected.GetComponent<ARAnchor>());
     }
 
     // Remove translation, rotation and scaling scripts for previously selected object
-    void DeselectObject()
+    public void DeselectObject()
     {
         if (m_currentSelection != null)
         {
@@ -222,6 +224,7 @@ public class PlaceObject : MonoBehaviour
     // Delete the currently selected object
     public void Delete()
     {
+        DataPersistenceManager.instance.RemoveDataPersistenceObject(m_currentSelection.GetComponent<InstantiatedObject>());
         Destroy(m_currentSelection);
         m_addedObjects.Remove(m_currentSelection);
         m_currentSelection = null;
@@ -233,8 +236,10 @@ public class PlaceObject : MonoBehaviour
     public void DeleteAll()
     {
         foreach (var obj in m_addedObjects)
+        {
+            DataPersistenceManager.instance.RemoveDataPersistenceObject(obj.GetComponent<InstantiatedObject>());
             Destroy(obj);
-
+        }
         m_addedObjects.Clear();
         m_movingObject = null;
         m_currentSelection = null;
@@ -287,30 +292,31 @@ public class PlaceObject : MonoBehaviour
 
     public void AddObject(GameObject prefabToAdd)
     {
-        Vector3 position;
+        Vector3 position = parentForCreation.transform.position;
         //Quaternion rotation;
-
-        m_debugText.text = "Addding new";
-        m_debugText.text += "\ntp " + m_touchPosition;
-        m_debugText.text += "\nmo.p " + m_movingObject.transform.position;
-
-        if (m_raycastManager.Raycast(m_touchPosition, s_Hits, TrackableType.PlaneWithinPolygon))
+        if (m_movingObject != null)
         {
-            position = s_Hits[0].pose.position;
-            //rotation = s_Hits[0].pose.rotation;
-        }
-        else
-        {
-            //If the destination (last position of drag & drop) is not valid (on an AR plane) we will not instantiate an object
-            // TODO Ar fi fost frumos sa il pot adauga in mijlocul ecranului sau intr-un punct valid.. idk how..
-           
-            //le las totusi aici ca sa putem testa ca se adauga ceva in Unity, dar pozitiile nu sunt valide pe telefon
-            position = m_movingObject.transform.position;
-            //rotation = Quaternion.identity;
-        }
+            m_debugText.text = "Addding new";
+            m_debugText.text += "\ntp " + m_touchPosition;
+            m_debugText.text += "\nmo.p " + m_movingObject.transform.position;
 
-        m_debugText.text += "\nfinal p " + position;
+            if (m_raycastManager.Raycast(m_touchPosition, s_Hits, TrackableType.PlaneWithinPolygon))
+            {
+                position = s_Hits[0].pose.position;
+                //rotation = s_Hits[0].pose.rotation;
+            }
+            else
+            {
+                //If the destination (last position of drag & drop) is not valid (on an AR plane) we will not instantiate an object
+                // TODO Ar fi fost frumos sa il pot adauga in mijlocul ecranului sau intr-un punct valid.. idk how..
 
+                //le las totusi aici ca sa putem testa ca se adauga ceva in Unity, dar pozitiile nu sunt valide pe telefon
+                position = m_movingObject.transform.position;
+                //rotation = Quaternion.identity;
+            }
+
+            m_debugText.text += "\nfinal p " + position;
+        }
         // Add a new object in scene
         var spawnedObject = Instantiate(prefabToAdd, position, prefabToAdd.transform.rotation);
         spawnedObject.transform.localScale /= 10.0f;
@@ -323,10 +329,14 @@ public class PlaceObject : MonoBehaviour
         /* Send anchor to ARCloudAnchorManager */
         ARCloudAnchorManager.Instance.QueueAnchor(anchor);
         //spawnedObject.AddComponent<InstantiatedObject>();
-
+        
         m_addedObjects.Add(spawnedObject);
-        spawnedObject.AddComponent<ColorChange>();
-        spawnedObject.AddComponent<MaterialChange>();
+        spawnedObject.GetComponent<InstantiatedObject>().Initialize(prefabToAdd.name);
+        
+        InstantiatedObject iO = spawnedObject.GetComponent<InstantiatedObject>();
+        
+        DataPersistenceManager.instance.AddDataPersistenceObject(iO);
+        if (parentForCreation != null) spawnedObject.transform.parent = parentForCreation.transform;
         SelectObject(spawnedObject);
     }
 

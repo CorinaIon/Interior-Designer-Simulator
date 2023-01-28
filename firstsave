@@ -1,0 +1,49 @@
+{
+    "objectData": [
+        {
+            "anchor": "",
+            "prefabName": "Chair_3",
+            "objectName": "Chair_3(Clone)",
+            "position": {
+                "x": 536.4223022460938,
+                "y": 1823.1339111328125,
+                "z": 0.0
+            },
+            "scale": {
+                "x": 9.0,
+                "y": 9.000001907348633,
+                "z": 9.000001907348633
+            },
+            "rotation": {
+                "x": 270.0,
+                "y": 180.0,
+                "z": 0.0
+            },
+            "color": "FFFFFF",
+            "materialName": "Chair_3 (Instance)"
+        },
+        {
+            "anchor": "",
+            "prefabName": "Cooker_1",
+            "objectName": "Cooker_1(Clone)",
+            "position": {
+                "x": 824.4278564453125,
+                "y": 1823.1339111328125,
+                "z": 0.0
+            },
+            "scale": {
+                "x": 12.165114402770996,
+                "y": 10.000001907348633,
+                "z": 10.000001907348633
+            },
+            "rotation": {
+                "x": 270.0,
+                "y": 180.0,
+                "z": 0.0
+            },
+            "color": "FFFFFF",
+            "materialName": "Cooker_1 (Instance)"
+        }
+    ],
+    "sceneName": ""
+}

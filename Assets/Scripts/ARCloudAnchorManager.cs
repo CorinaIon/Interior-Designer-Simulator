@@ -21,7 +21,7 @@ public class ARCloudAnchorManager : MonoBehaviour
     public ARAnchorManager arAnchorManager = null;
     private ARAnchor pendingHostAnchor = null;
     private ARCloudAnchor cloudAnchor = null;
-    private string anchorIdToResolve;
+    public string anchorIdToResolve;
     private bool anchorHostInProgress = false;
     private bool anchorResolveInProgress = false;
     private float safeToResolvePassed = 0;
@@ -109,7 +109,7 @@ public class ARCloudAnchorManager : MonoBehaviour
         }
     }
 
-    private void CheckHostingProgress()
+    public bool CheckHostingProgress()
     {
         // Implement CheckHostingProgress logic
         CloudAnchorState cloudAnchorState = cloudAnchor.cloudAnchorState;
@@ -118,6 +118,7 @@ public class ARCloudAnchorManager : MonoBehaviour
             anchorHostInProgress = false;
             anchorIdToResolve = cloudAnchor.cloudAnchorId;
             g2.image.color = Color.green;
+            return true;
         }
         else
         {
@@ -126,6 +127,7 @@ public class ARCloudAnchorManager : MonoBehaviour
                 m_debugTextPermanent.text = "Error while hosting cloud anchor: " + cloudAnchorState.ToString();
                 anchorHostInProgress = false;
             }
+            return false;
         }
     }
 

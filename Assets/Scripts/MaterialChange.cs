@@ -28,8 +28,9 @@ public class MaterialChange : MonoBehaviour
         {
             baseMaterials[i] = rend.material;
             materials[i] = rend.material;
+            i++;
         }
-
+        selectedMaterial = baseMaterials[0];
     }
 
     private void OnMaterialSelected(object sender, EventArgs e)
@@ -44,11 +45,27 @@ public class MaterialChange : MonoBehaviour
             {
                 rend.material = matObj.objectReference.objectMaterial;
                 materials[i] = rend.material;
+                i++;
             }
             selectedMaterial = matObj.objectReference.objectMaterial;
             ColorChange cg = GetComponent<ColorChange>();
 
             if (cg != null) cg.SetMaterials(materials);
         }
+    }
+
+    public void SetMaterials()
+    {
+        int i = 0;
+        foreach (MeshRenderer rend in renderers)
+        {
+            rend.material = selectedMaterial;
+            materials[i] = rend.material;
+            i++;
+        }
+        ColorChange cg = GetComponent<ColorChange>();
+
+        if (cg != null) cg.SetMaterials(materials);
+
     }
 }

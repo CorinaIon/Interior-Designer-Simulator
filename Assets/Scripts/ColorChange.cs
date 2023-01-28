@@ -18,6 +18,7 @@ public class ColorChange : MonoBehaviour
     // Start is called before the first frame update
     public void Initialize()
     {
+        if (colorPicker == null) colorPicker = ColorPicker.instanceColorPicker;
         obj = GetComponent<InstantiatedObject>();
         colorPicker.OnColorSelect += OnColorSelected;
 
@@ -37,6 +38,7 @@ public class ColorChange : MonoBehaviour
             baseColors[i] = mat.color;
             i++;
         }
+        actualColor = baseColors[0];
     }
 
     private void OnColorSelected(object sender, EventArgs e)
@@ -55,5 +57,14 @@ public class ColorChange : MonoBehaviour
     public void SetMaterials(Material[] mat)
     {
         materials = mat;
+    }
+
+    public void SetColor()
+    {
+        Color color = actualColor;
+        foreach (Material mat in materials)
+        {
+            mat.color = color;
+        }
     }
 }
