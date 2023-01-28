@@ -12,32 +12,18 @@ public class DragObject : MonoBehaviour
     public TextMeshProUGUI m_debugText;
     static List<ARRaycastHit> s_Hits = new List<ARRaycastHit>();
 
-    // Start is called before the first frame update
     void Start()
     {
         var o = GameObject.Find("Locatia");
         m_debugText = o != null ? o.GetComponent<TextMeshProUGUI>() : null;
     }
 
-    // Update is called once per frame
     void Update()
     {
         if (Input.touchCount > 0)
         {
             touch = Input.GetTouch(0);
 
-            //ar an 1 sem 1
-            // This line moves the object up-down, left-right and front-back 
-            //transform.position += new Vector3(0, touch.deltaPosition.y * speedModifier, 0);
-            //transform.position += new Vector3(touch.deltaPosition.x * speedModifier, 0,  0);
-
-            //net1
-            //// get the touch position from the screen touch to world point
-            //Vector3 touchedPos = Camera.main.ScreenToWorldPoint(new Vector3(touch.position.x, touch.position.y, 10));
-            //// lerp and set the position of the current object to that of the touch, but smoothly over time.
-            //transform.position = Vector3.Lerp(transform.position, touchedPos, Time.deltaTime);
-
-            //leandragtranslate
             // Screen position of the transform
             var screenPoint = Camera.current.WorldToScreenPoint(transform.position);
             Vector2 screenDelta = touch.deltaPosition;
@@ -63,25 +49,15 @@ public class DragObject : MonoBehaviour
                     if (snap && PlaceObject.instance.m_raycastManager.Raycast(pos, s_Hits, TrackableType.PlaneWithinPolygon))
                     {
                         transform.position = s_Hits[0].pose.position;
-                       // m_debugText.text = "a mers";
                     }
                     else
                     {
                         // Convert back to world space
                         transform.position = Camera.current.ScreenToWorldPoint(screenPoint);
-                       // m_debugText.text = "nu a mers";
                     }
                     
                 }
-                //else m_debugText.text = "hit. dar nu e current";
             }
-            //else m_debugText.text = "nimic";
-
-            //m_debugText.text = "Tag: " + tagName + ", Name: " + nameN + ", Locatia: " + transform.position.ToString();
-
-           
-
-            
         }
     }
 }

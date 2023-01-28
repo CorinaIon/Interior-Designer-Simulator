@@ -15,22 +15,18 @@ public class ARCloudAnchorManager : MonoBehaviour
     [SerializeField]
     public Camera arCamera = null;
 
-    [SerializeField]
-    private float resolveAnchorPassedTimeout = 10.0f;
-
     public ARAnchorManager arAnchorManager = null;
     private ARAnchor pendingHostAnchor = null;
     private ARCloudAnchor cloudAnchor = null;
+    private AnchorCreatedEvent anchorCreatedEvent = null;
     public string anchorIdToResolve;
     private bool anchorHostInProgress = false;
     private bool anchorResolveInProgress = false;
+    private float resolveAnchorPassedTimeout = 10.0f;
     private float safeToResolvePassed = 0;
-    private AnchorCreatedEvent anchorCreatedEvent = null;
-    public Button g1, g2, g3;
+    //public TextMeshProUGUI m_debugText;
 
     public static ARCloudAnchorManager Instance { get; private set; }
-
-    public TextMeshProUGUI m_debugTextPermanent;
 
     private void Awake()
     {
@@ -52,58 +48,48 @@ public class ARCloudAnchorManager : MonoBehaviour
         return new Pose(arCamera.transform.position, arCamera.transform.rotation);
     }
 
-    // #TO_Andreea
-    // asta e ca sa asignez variabilei globale pendingHostAnchor o Ancora (a obiectului curent. stie pozitie si rotatie)
     public void QueueAnchor(ARAnchor arAnchor)
     {
         pendingHostAnchor = arAnchor;
     }
 
-    // #TO_Andreea
-    // functia asta e apelata prin butonul portocaliu 1 stanga
     public void HostAnchor()
     {
-        g1.image.color = Color.red;
-        g2.image.color = Color.red;
-
-        Debug.Log("HostAnchor call in progress");
-        m_debugTextPermanent.text += " HostAnchor call in progress: " + pendingHostAnchor.ToString();
+        // m_debugText.text += " HostAnchor call in progress: " + pendingHostAnchor.ToString();
 
         // Get FeatureMapQuality
         FeatureMapQuality quality = arAnchorManager.EstimateFeatureMapQualityForHosting(GetCameraPose());
-        m_debugTextPermanent.text += " Feature Map Quality: " + quality.ToString();
+        // m_debugText.text += " Feature Map Quality: " + quality.ToString();
 
         // Save in cloudAnchor variable the result of the hosting process
-        // al doilea param e ttlDays: 1-365
-        cloudAnchor = arAnchorManager.HostCloudAnchor(pendingHostAnchor, 1);
-        
+        // ttl for anchors 31 days. Only premium users can have them for 365 days ;)
+        cloudAnchor = arAnchorManager.HostCloudAnchor(pendingHostAnchor, 31);
+
         if (cloudAnchor == null)
         {
-            m_debugTextPermanent.text += " Unable to host cloud anchor";
+            //m_debugText.text += " Unable to host cloud anchor";
         }
         else
         {
             anchorHostInProgress = true;
         }
-        g1.image.color = Color.green;
     }
 
     // #TO_Andreea
     // functia asta e apelata prin butonul portocaliu 2 dreapta
     public void Resolve()
     {
-        g3.image.color = Color.red;
-        m_debugTextPermanent.text = "Resolve call in progress.";
+        // m_debugText.text = "Resolve call in progress.";
 
         // Save in cloudAnchor variable the result of the resolve process
         cloudAnchor = arAnchorManager.ResolveCloudAnchorId(anchorIdToResolve);
 
         if (cloudAnchor == null)
         {
-            m_debugTextPermanent.text = "Unable to resolve cloud anchor " + anchorIdToResolve.ToString();
+            // m_debugText.text = "Unable to resolve cloud anchor " + anchorIdToResolve.ToString();
         }
         else
-        { 
+        {
             safeToResolvePassed = resolveAnchorPassedTimeout;
             anchorResolveInProgress = true;
         }
@@ -117,14 +103,13 @@ public class ARCloudAnchorManager : MonoBehaviour
         {
             anchorHostInProgress = false;
             anchorIdToResolve = cloudAnchor.cloudAnchorId;
-            g2.image.color = Color.green;
             return true;
         }
         else
         {
             if (cloudAnchorState != CloudAnchorState.TaskInProgress)
             {
-                m_debugTextPermanent.text = "Error while hosting cloud anchor: " + cloudAnchorState.ToString();
+                // m_debugText.text = "Error while hosting cloud anchor: " + cloudAnchorState.ToString();
                 anchorHostInProgress = false;
             }
             return false;
@@ -138,16 +123,13 @@ public class ARCloudAnchorManager : MonoBehaviour
         if (cloudAnchorState == CloudAnchorState.Success)
         {
             anchorResolveInProgress = false;
-            // #TO_Andreea
-            // aici invoc o functie pe care am scris-o in Awake, in cazul asta: RecreatePlacement dim=n PlaceObject.cs (care creaza un prefab cub)
             anchorCreatedEvent?.Invoke(cloudAnchor.transform);
-            g3.image.color = Color.green;
         }
         else
         {
             if (cloudAnchorState != CloudAnchorState.TaskInProgress)
             {
-                m_debugTextPermanent.text = "Error while resolving cloud anchor: " + cloudAnchorState.ToString();
+                // m_debugText.text = "Error while resolving cloud anchor: " + cloudAnchorState.ToString();
                 anchorResolveInProgress = false;
             }
         }
@@ -169,7 +151,7 @@ public class ARCloudAnchorManager : MonoBehaviour
 
             if (!string.IsNullOrEmpty(anchorIdToResolve))
             {
-                m_debugTextPermanent.text = "Resolving Anchor Id: " + anchorIdToResolve.ToString();
+                // m_debugText.text = "Resolving Anchor Id: " + anchorIdToResolve.ToString();
                 CheckResolveProgress();
             }
         }
@@ -178,15 +160,4 @@ public class ARCloudAnchorManager : MonoBehaviour
             safeToResolvePassed -= Time.deltaTime * 1.0f;
         }
     }
-
-    // #TO_Andreea
-    // ideal. Dai pe buton Save Scene. Are numele NewScene1 (dar userul il poate schimba in orice mai putin "" (nimic), caz in care ramane NewScene1 de fapt. 
-    // se apeleaza o functie care ia toate obiectele instantiate din scena si creaza un doc "NewScene1.extensie" ce contine o lista (sau cum te pricepi tu de la licenta):
-    // prefab1 idAncora1 
-    // prefab2 idAncora2
-    // prefab1 (se poate repeta) idAncora3
-    //..
-    //cand dai Load si alegi NewScene1, se duce si citeste din fisier si face Resolve pentru fiecare id. Eventual modifici tu functia sa fie Resolve(anchorIdToResolve, prefab)
-    // si Resolve mai departe invoca functia RecreatePlacement(prefab)
-    //ideal ar fi sa faca astea de Host/Resolve in paralel (mai multe de o data), dar merge si intr-un for pe rand..
 }

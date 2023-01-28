@@ -46,7 +46,7 @@ public class SceneEditUIManager : MonoBehaviour
         exitEditPanel.SetActive(false);
     }
 
-    bool isColorWheelActive = false;
+    public bool isColorWheelActive = false;
     public void DisplayColorWheel()
     {
         if(isColorWheelActive == true)

@@ -29,7 +29,7 @@ public class ObjectsUIMenu : MonoBehaviour
     public GameObject leftBttn, rightBttn;
 
     int index = 0;
-    bool clicked = false;
+    public bool clicked = false;
     GameObject containerObject;
     Animator anim;
     // Start is called before the first frame update

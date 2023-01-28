@@ -7,8 +7,6 @@ using TMPro;
 using UnityEngine.EventSystems;
 using UnityEngine.UI;
 
-
-
 [RequireComponent(typeof(ARRaycastManager))]
 public class PlaceObject : MonoBehaviour
 {
@@ -43,8 +41,6 @@ public class PlaceObject : MonoBehaviour
     public Button trashButton;
 
     public TextMeshProUGUI m_debugText;
-    public TextMeshProUGUI m_debugTextPermanent;
-    public TextMeshProUGUI m_snapText;
     public GameObject parentForCreation;
     void Awake()
     {
@@ -52,11 +48,7 @@ public class PlaceObject : MonoBehaviour
 
         m_raycastManager = GetComponent<ARRaycastManager>();
         m_addedObjects = new List<GameObject>();
-        m_debugText.text = "Debug";
         m_nameToPrefab = new Dictionary<string, GameObject>();
-
-        //add from inventar
-        //m_nameToPrefab["Cube"] = prefabCube;
     }
 
     private void Start()
@@ -107,26 +99,6 @@ public class PlaceObject : MonoBehaviour
 
             m_currentSelection = null;
         }
-    }
-
-    bool TryGetTouchPosition(out Vector2 touchPosition)
-    {
-        Touch touch;
-
-        if (Input.touchCount < 1 || (touch = Input.GetTouch(0)).phase != TouchPhase.Began)
-        {
-            touchPosition = default;
-            return false;
-        }
-
-        if (Input.touchCount > 0)
-        {
-            touchPosition = Input.GetTouch(0).position;
-            return true;
-        }
-
-        touchPosition = default;
-        return false;
     }
 
     bool CheckDoubleTap(out Vector2 touchPosition)
@@ -180,8 +152,6 @@ public class PlaceObject : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-
-        m_debugTextPermanent.text = m_isDeleteHovered.ToString();
         m_touchPosition = default;
         if (Input.touchCount < 1)
         {
@@ -200,25 +170,12 @@ public class PlaceObject : MonoBehaviour
             }
         }
 
-        //m_debugTextPermanent.text = "cS: " + ((m_currentSelection != null) ? m_currentSelection.name : "") +
-        //    "\nmo: " + m_movingObject + "\ntp: " + m_touchPosition;
-
-        if (m_currentSelection != null)
+        if (m_currentSelection == null)
         {
-            //if (!HandleTouch(out Vector2 m222222222222_touchPosition))
-            //{
-            //    return;
-            //}
-        }
-        else
-        {
-            CheckDoubleTap(out Vector2 m2222222222223333333_touchPosition);
+            CheckDoubleTap(out Vector2 useless_touchPosition);
         }
         
-        //TODO. Sau altceva care sa evidentieze obiectul selectat.
         DrawBoundingBox();
-
-        
     }
 
     // Delete the currently selected object
@@ -255,7 +212,6 @@ public class PlaceObject : MonoBehaviour
         GameObject pressedButton = data.selectedObject;
 
         // Here we add the preview prefab (not the actual object, just a preview)
-        // TODO. Este un Image, cu un copil Text. Nu stiu cum sa fac sa apara obiectul 3D ca parte din UI. 
         m_movingObject = Instantiate(m_newUI, pressedButton.transform.position, pressedButton.transform.rotation);
         m_movingObject.transform.parent = m_inventoryParent.transform;
 
@@ -286,14 +242,12 @@ public class PlaceObject : MonoBehaviour
         }
         Destroy(m_movingObject);
         m_movingObject = null;
-        
-        //TODO Inventar Inactiv here
     }
 
     public void AddObject(GameObject prefabToAdd)
     {
         Vector3 position = parentForCreation.transform.position;
-        //Quaternion rotation;
+        
         if (m_movingObject != null)
         {
             m_debugText.text = "Addding new";
@@ -303,16 +257,11 @@ public class PlaceObject : MonoBehaviour
             if (m_raycastManager.Raycast(m_touchPosition, s_Hits, TrackableType.PlaneWithinPolygon))
             {
                 position = s_Hits[0].pose.position;
-                //rotation = s_Hits[0].pose.rotation;
             }
             else
             {
                 //If the destination (last position of drag & drop) is not valid (on an AR plane) we will not instantiate an object
-                // TODO Ar fi fost frumos sa il pot adauga in mijlocul ecranului sau intr-un punct valid.. idk how..
-
-                //le las totusi aici ca sa putem testa ca se adauga ceva in Unity, dar pozitiile nu sunt valide pe telefon
-                position = m_movingObject.transform.position;
-                //rotation = Quaternion.identity;
+                // position = m_movingObject.transform.position;
             }
 
             m_debugText.text += "\nfinal p " + position;
@@ -322,11 +271,11 @@ public class PlaceObject : MonoBehaviour
         spawnedObject.transform.localScale /= 10.0f;
 
         ////obsolete
-        ///* TODO 2.2 Attach an anchor to the prefab (Hint! Use AddAnchor method from arAnchorManager object) */
+        ///Attach an anchor to the prefab (Hint! Use AddAnchor method from arAnchorManager object)
         //ARAnchor anchor = arAnchorManager.AddAnchor(new Pose(spawnedObject.transform.position, spawnedObject.transform.rotation));
         //spawnedObject.transform.parent = anchor.transform;
         ARAnchor anchor = spawnedObject.AddComponent<ARAnchor>();
-        /* Send anchor to ARCloudAnchorManager */
+        // Send anchor to ARCloudAnchorManager
         ARCloudAnchorManager.Instance.QueueAnchor(anchor);
         //spawnedObject.AddComponent<InstantiatedObject>();
         
@@ -349,8 +298,6 @@ public class PlaceObject : MonoBehaviour
     public void ConfirmChanges()
     {
         DeselectObject();
-        //TODO Inventar buton activ here
-
     }
 
     public void DragMenuButton()
@@ -368,7 +315,6 @@ public class PlaceObject : MonoBehaviour
         m_debugText.text = "pos pentru " + m_movingObject.transform.name + " este " + m_movingObject.transform.position;
     }
 
-
     public void DeleteEnterPointer()
     {
         m_isDeleteHovered = true;
@@ -384,15 +330,15 @@ public class PlaceObject : MonoBehaviour
 
     public void Rotate(int direction)
     {
-        float amount = 15.0f;// * Mathf.Deg2Rad;
+        float amount = 15.0f;
         m_currentSelection.transform.Rotate(0, amount * direction, 0, Space.World);
     }
 
     public void SwitchSnapMode()
     {
         snap = !snap;
-        m_snapText.text = "Snap: " + snap.ToString();
-        if (snap == true) SceneEditUIManager.instance.ChangeColorSnapButton(Color.green);
+        if (snap) 
+            SceneEditUIManager.instance.ChangeColorSnapButton(Color.green);
         else SceneEditUIManager.instance.ChangeColorSnapButton(Color.red);
     }
 

@@ -32,7 +32,7 @@ public class MaterialUIMenu : MonoBehaviour
     public event EventHandler OnClickEvent;
 
     int index = 0;
-    bool clicked = false;
+    public bool clicked = false;
     GameObject containerObject;
     Animator anim;
 
